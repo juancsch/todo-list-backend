@@ -1,0 +1,8 @@
+.vscode
+.idea
+
+/lib
+/report
+/coverage
+
+node_modules

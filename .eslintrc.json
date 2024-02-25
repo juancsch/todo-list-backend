@@ -1,0 +1,54 @@
+{
+  "env": {
+    "node": true
+  },
+  "plugins": [
+    "import",
+    "simple-import-sort",
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "standard-with-typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": [
+    "*.js"
+  ],
+  "rules": {
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          ["^\\u0000"],
+          ["^node:"],
+          ["^(assert|os|path|fs|fs/promises|url|http|events|stream|child_process|worker_threads|module)$"],
+          ["^@?\\w"],
+          ["^"],
+          ["^\\.\\./\\.\\./\\.\\./\\.\\./\\.\\./"],
+          ["^\\.\\./\\.\\./\\.\\./\\.\\./"],
+          ["^\\.\\./\\.\\./\\.\\./"],
+          ["^\\.\\./\\.\\./"],
+          ["^\\.\\./"],
+          ["^\\./"]
+        ]
+      }
+    ],
+    "import/first": "error",
+    "import/no-duplicates": "error",
+    "import/newline-after-import": "error",
+    "padded-blocks": "off",
+    "no-tabs": "off",
+    "prefer-promise-reject-errors": "error",
+    "@typescript-eslint/indent": ["error", "tab"],
+    "@typescript-eslint/no-magic-numbers": ["warn", { "ignore": [0, 1, 2, 200, 400, 404, 500] }],
+    "@typescript-eslint/restrict-template-expressions": ["error", { "allowAny": true }],
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/explicit-function-return-type": "off"
+  }
+}
