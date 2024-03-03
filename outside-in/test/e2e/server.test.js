@@ -5,7 +5,7 @@ import { createTodoListServer } from '../../src/Server.js'
 
 /**
  * [] add todo (text, id) - POST /todos { id, text }
- * [] get one todo - GET /todos/id
+ * [X] get one todo - GET /todos/id
  * [] remove todo - DELETE /todos/id
  * [] mark as done - PUT /todos { id, text, mark }
  * [X] get all todos - GET /todos
@@ -59,6 +59,26 @@ describe('TODO list HTTP Server', async () => {
 				text: 'todo 2',
 				done: false
 			}])
+		})
+
+		test('should get one todo', async () => {
+			const response = await fetch('http://localhost:8080/todos/367af223-0499-4203-90ae-c3fa4ad3351e')
+
+			assert.equal(response.status, 200)
+			assert.deepEqual(await response.json(), {
+				id: '367af223-0499-4203-90ae-c3fa4ad3351e',
+				text: 'todo 1',
+				done: false
+			})
+		})
+
+		test('should return 404 when todo not found', async () => {
+			const response = await fetch('http://localhost:8080/todos/367af223-0499-4203-90ae-c3fa4ad3351f')
+
+			assert.equal(response.status, 404)
+			assert.deepEqual(await response.json(), {
+				message: 'TODO [367af223-0499-4203-90ae-c3fa4ad3351f] not found'
+			})
 		})
 	})
 })

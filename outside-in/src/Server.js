@@ -1,6 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http'
 
 import { AllTODOsRoute } from './AllTODOsRoute.js'
+import { GetTODORoute } from './GetTODORoute.js'
 
 /**
  * @typedef {object} Log
@@ -72,6 +73,7 @@ export function createTodoListServer ({ port = 8080, log = console, config }) {
 function requestHandler (log, config) {
 
 	const allTODOsRoute = AllTODOsRoute(log, config)
+	const getOneTODO = GetTODORoute(log, config)
 
 	return async (request, response) => {
 		try {
@@ -81,6 +83,9 @@ function requestHandler (log, config) {
 					break
 				case allTODOsRoute.isFor(request):
 					await allTODOsRoute.handler(request, response)
+					break
+				case getOneTODO.isFor(request):
+					await getOneTODO.handler(request, response)
 					break
 				default:
 					notFoundHandler(request, response)
