@@ -2,7 +2,12 @@ import { createTodoListServer } from './Server.js'
 
 const listenPort = process.env.PORT || '8080'
 
-const todoListServer = createTodoListServer(Number(listenPort))
+const todoListServer = createTodoListServer({
+	port: Number(listenPort),
+	config: {
+		dbPath: 'todos.json'
+	}
+})
 todoListServer.start().catch(console.error)
 
 process.on('SIGINT', () => {

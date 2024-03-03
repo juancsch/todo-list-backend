@@ -1,5 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http'
 
+import { AllTODOsRoute } from './AllTODOsRoute.js'
+
 /**
  * @typedef {object} Log
  * @property {function(...any): void} info
@@ -7,17 +9,31 @@ import http, { IncomingMessage, ServerResponse } from 'http'
  */
 
 /**
- * @param {number} [port]
- * @param {Log} [log]
+ * @typedef {object} Config
+ * @property {string} dbPath
+ */
+
+/**
+ * @typedef {object} Route
+ * @property {function(IncomingMessage): boolean} isFor
+ * @property {function(IncomingMessage, ServerResponse): void} handler
+ */
+
+/**
+ * @param {{
+ *   port?: number,
+ *   config: Config,
+ *   log?: Log
+ * }} args
  * @returns {{
  *   start: function(): Promise<void>,
  *   stop: function(): Promise<void>
  * }}
  */
-export function createTodoListServer (port = 8080, log = console) {
+export function createTodoListServer ({ port = 8080, log = console, config }) {
 
 	const server = http.createServer()
-		.on('request', requestHandler(log))
+		.on('request', requestHandler(log, config))
 		.on('error', (error) => {
 			log.error('Server error', error)
 		})
@@ -50,15 +66,21 @@ export function createTodoListServer (port = 8080, log = console) {
 
 /**
  * @param {Log} log
+ * @param {Config} config
  * @returns {function(IncomingMessage, ServerResponse): void}
  */
-function requestHandler (log) {
+function requestHandler (log, config) {
 
-	return (request, response) => {
+	const allTODOsRoute = AllTODOsRoute(log, config)
+
+	return async (request, response) => {
 		try {
-			switch (request.url) {
-				case '/':
+			switch (true) {
+				case request.method === 'GET' && request.url === '/error':
 					errorHandler(request, response)
+					break
+				case allTODOsRoute.isFor(request):
+					await allTODOsRoute.handler(request, response)
 					break
 				default:
 					notFoundHandler(request, response)
