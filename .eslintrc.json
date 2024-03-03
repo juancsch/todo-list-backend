@@ -1,54 +1,58 @@
 {
-  "env": {
-    "node": true
-  },
-  "plugins": [
-    "import",
-    "simple-import-sort",
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "standard-with-typescript"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2022,
-    "project": "./tsconfig.json"
-  },
-  "ignorePatterns": [
-    "*.js"
-  ],
-  "rules": {
-    "simple-import-sort/imports": [
-      "error",
-      {
-        "groups": [
-          ["^\\u0000"],
-          ["^node:"],
-          ["^(assert|os|path|fs|fs/promises|url|http|events|stream|child_process|worker_threads|module)$"],
-          ["^@?\\w"],
-          ["^"],
-          ["^\\.\\./\\.\\./\\.\\./\\.\\./\\.\\./"],
-          ["^\\.\\./\\.\\./\\.\\./\\.\\./"],
-          ["^\\.\\./\\.\\./\\.\\./"],
-          ["^\\.\\./\\.\\./"],
-          ["^\\.\\./"],
-          ["^\\./"]
-        ]
-      }
-    ],
-    "import/first": "error",
-    "import/no-duplicates": "error",
-    "import/newline-after-import": "error",
-    "padded-blocks": "off",
-    "no-tabs": "off",
-    "prefer-promise-reject-errors": "error",
-    "@typescript-eslint/indent": ["error", "tab"],
-    "@typescript-eslint/no-magic-numbers": ["warn", { "ignore": [0, 1, 2, 200, 400, 404, 500] }],
-    "@typescript-eslint/restrict-template-expressions": ["error", { "allowAny": true }],
-    "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
-  }
+	"env": {
+		"node": true
+	},
+	"plugins": [
+		"jsdoc",
+		"import",
+		"simple-import-sort"
+	],
+	"extends": [
+		"plugin:jsdoc/recommended",
+		"standard"
+	],
+	"rules": {
+		"simple-import-sort/imports": [
+			"error", {
+				"groups": [
+					["^\\u0000"],
+					["^node:"],
+					["^(os|path|fs|url|events|http)$"],
+					["^@?\\w"],
+					["^"],
+					["^\\.\\./\\.\\./\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./\\.\\./"],
+					["^\\.\\./\\.\\./"],
+					["^\\.\\./"],
+					["^\\./"]
+				]
+			}
+		],
+		"import/first": "error",
+		"import/no-duplicates": "error",
+		"import/newline-after-import": "error",
+		"jsdoc/require-param-description": "off",
+		"jsdoc/require-returns-description": "off",
+		"jsdoc/require-property-description": "off",
+		"jsdoc/require-jsdoc": ["error", {
+			"require": {
+				"FunctionDeclaration": true,
+				"FunctionExpression": true,
+				"ClassDeclaration": true,
+				"ClassExpression": true,
+				"MethodDefinition": true,
+				"ArrowFunctionExpression": true
+			}
+		}],
+		"indent": "off",
+		"no-tabs": "off",
+		"padded-blocks": "off",
+		"operator-linebreak": "off",
+		"no-magic-numbers": ["warn", {
+				"ignore": [0, 1, 200, 204, 404, 405, 500, 8080]
+			}
+		],
+		"prefer-promise-reject-errors": "error"
+	}
 }
