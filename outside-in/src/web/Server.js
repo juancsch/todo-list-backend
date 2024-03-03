@@ -1,18 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http'
 
-import { AllTODOsRoute } from './AllTODOsRoute.js'
-import { GetTODORoute } from './GetTODORoute.js'
-
-/**
- * @typedef {object} Log
- * @property {function(...any): void} info
- * @property {function(...any): void} error
- */
-
-/**
- * @typedef {object} Config
- * @property {string} dbPath
- */
+import { AllTODOsRoute } from './routes/AllTODOsRoute.js'
+import { GetTODORoute } from './routes/GetTODORoute.js'
 
 /**
  * @typedef {object} Route
@@ -23,8 +12,8 @@ import { GetTODORoute } from './GetTODORoute.js'
 /**
  * @param {{
  *   port?: number,
- *   config: Config,
- *   log?: Log
+ *   config: import('../Config.js').Config,
+ *   log?: import('../Log.js').Log
  * }} args
  * @returns {{
  *   start: function(): Promise<void>,
@@ -66,8 +55,8 @@ export function createTodoListServer ({ port = 8080, log = console, config }) {
 }
 
 /**
- * @param {Log} log
- * @param {Config} config
+ * @param {import('../Log.js').Log} log
+ * @param {import('../Config.js').Config} config
  * @returns {function(IncomingMessage, ServerResponse): void}
  */
 function requestHandler (log, config) {

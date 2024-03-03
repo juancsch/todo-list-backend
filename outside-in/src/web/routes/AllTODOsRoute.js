@@ -1,11 +1,11 @@
 import { IncomingMessage, ServerResponse } from 'http'
 
-import { readFile } from 'fs/promises'
+import { GetAllTODOs } from '../../todos/GetAllTODOs.js'
 
 /**
- * @param {import("./Server").Log} log
- * @param {import("./Server").Config} config
- * @returns {import("./Server").Route}
+ * @param {import("../../Log.js").Log} log
+ * @param {import("../../Config.js").Config} config
+ * @returns {import("../Server").Route}
  */
 export function AllTODOsRoute (log, config) {
 
@@ -32,19 +32,5 @@ export function AllTODOsRoute (log, config) {
 			})
 			response.end(JSON.stringify(allTODOs))
 		}
-	}
-}
-
-/**
- * @param {import("./Server").Log} log
- * @param {import("./Server").Config} config
- * @returns {function(): Promise<{id: string, text: string, done: boolean}[]>}
- */
-function GetAllTODOs (log, config) {
-
-	log.info('Get all TODOs from db:', config.dbPath)
-
-	return async () => {
-		return JSON.parse(await readFile(config.dbPath, 'utf8'))
 	}
 }

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { after, before, describe, test } from 'node:test'
 
-import { createTodoListServer } from '../../src/Server.js'
+import { createTodoListServer } from '../../src/web/Server.js'
 
 /**
  * [] add todo (text, id) - POST /todos { id, text }
