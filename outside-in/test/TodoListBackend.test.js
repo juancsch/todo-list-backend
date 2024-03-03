@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { after, before, describe, test } from 'node:test'
 
-import { createTodoListServer } from '../../src/web/Server.js'
+import { createTodoListServer } from '../src/web/Server.js'
 
 /**
  * [] add todo (text, id) - POST /todos { id, text }
@@ -11,11 +11,11 @@ import { createTodoListServer } from '../../src/web/Server.js'
  * [X] get all todos - GET /todos
  */
 
-describe('TODO list HTTP Server', async () => {
+describe('TODO list backend', async () => {
 
 	const server = createTodoListServer({
 		config: {
-			dbPath: './outside-in/test/e2e/fixtures/todos.json'
+			dbPath: './outside-in/test/fixtures/todos.json'
 		}
 	})
 

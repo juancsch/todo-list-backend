@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>TODO List Backend</title>
+</head>
+
+<body>
+	<h1>TODO List Backend</h1>
+	<div id="todos">
+		<p>Loading...</p>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			fetch('http://localhost:8080/todos')
+				.then(response => response.json())
+				.then(printTodos)
+		})
+
+		function printTodos(todos) {
+			const todosContainer = document.getElementById('todos')
+			todosContainer.innerHTML = '<ul>' + todos.map(
+				todo => `<li id="${todo.id}">${isStrike(todo)}&nbsp;&nbsp;<button>Done</button></li>`
+			).join('') + '</ul>'
+
+			function isStrike(todo) {
+				if (todo.done)
+					return '<strike>' + todo.text + '</strike>'
+				return todo.text
+			}
+		}
+	</script>
+
+</body>
+
+</html>

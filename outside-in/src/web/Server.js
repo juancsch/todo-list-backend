@@ -66,6 +66,12 @@ function requestHandler (log, config) {
 
 	return async (request, response) => {
 		try {
+			if (isPreflight(request)) {
+				sendPreflightCORS(request, response)
+				return
+			}
+			enableCORS(request, response)
+
 			switch (true) {
 				case request.method === 'GET' && request.url === '/error':
 					errorHandler(request, response)
@@ -82,6 +88,38 @@ function requestHandler (log, config) {
 		} catch (error) {
 			errorHandler(request, response, error)
 		}
+	}
+
+	/**
+	 * @param {IncomingMessage} request
+	 * @returns {boolean}
+	 */
+	function isPreflight (request) {
+		const origin = request.headers.origin
+		const accessControlRequestMethod = request.headers['access-control-request-method']
+		return request.method === 'OPTIONS' && !!origin && !!accessControlRequestMethod
+	}
+
+	/**
+	 * @param {IncomingMessage} request
+	 * @param {ServerResponse} response
+	 */
+	function sendPreflightCORS (request, response) {
+		enableCORS(request, response)
+		response
+			.writeHead(204, { 'Content-Length': '0'	})
+			.end()
+	}
+
+	/**
+	 * @param {IncomingMessage} request
+	 * @param {ServerResponse} response
+	 * @returns {void}
+	 */
+	function enableCORS (request, response) {
+		response.setHeader('Access-Control-Allow-Origin', request.headers.origin ?? '*')
+		response.setHeader('Access-Control-Allow-Methods', request.headers['access-control-request-method'] ?? 'GET,HEAD,PUT,PATCH,POST,DELETE')
+		response.setHeader('Access-Control-Allow-Headers', request.headers['access-control-allow-headers'] ?? 'Content-Type,Content-Length')
 	}
 
 	/**
