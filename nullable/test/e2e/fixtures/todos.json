@@ -1,0 +1,17 @@
+[
+    {
+        "id": "367af223-0499-4203-90ae-c3fa4ad3351e",
+        "text": "todo 1",
+        "done": false
+    },
+    {
+        "id": "7e7fec93-4911-4025-b5bd-b62a0f95285d",
+        "text": "todo 2",
+        "done": true
+    },
+    {
+        "id": "2dd08285-40d7-4863-82e4-4dd5692d5fa6",
+        "text": "todo 2",
+        "done": false
+    }
+]
