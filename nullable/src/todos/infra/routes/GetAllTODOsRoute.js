@@ -4,7 +4,7 @@ import * as HttpServer from '../../../web/Server.js'
 
 /**
  * @typedef {object} GetAllTODOsRoute
- * @property {function(function(): Promise<Array<import("../../GetAllTODOs.js").TODO>>): void} addGetAllTODOs
+ * @property {function(function(): Promise<Array<import("../../domain/TODO.js").TODO>>): void} addGetAllTODOs
  */
 
 /**
@@ -22,7 +22,7 @@ export function create (server) {
 function GetAllTODOsRoute (server) {
 	return {
 		/**
-		 * @param {function(): Promise<Array<import("../../GetAllTODOs.js").TODO>>} getAllTODOs
+		 * @param {function(): Promise<Array<import("../../domain/TODO.js").TODO>>} getAllTODOs
 		 */
 		addGetAllTODOs (getAllTODOs) {
 			const getAllTODOsRoute = {
@@ -48,7 +48,7 @@ function GetAllTODOsRoute (server) {
 /**
  * @returns {GetAllTODOsRoute & {
  *   simulateRequest: function(): Promise<void>,
- *   trackerResponses: function(): Array<{status: number, payload: Array<import("../../GetAllTODOs.js").TODO>}>
+ *   trackerResponses: function(): Array<{status: number, payload: Array<import("../../domain/TODO.js").TODO>}>
  * }}
  */
 export function createNull () {
@@ -66,7 +66,7 @@ export function createNull () {
 			})
 		},
 		/**
-		 * @returns {Array<{status: number, payload: Array<import("../../GetAllTODOs.js").TODO>}>}
+		 * @returns {Array<{status: number, payload: Array<import("../../domain/TODO.js").TODO>}>}
 		 */
 		trackerResponses () {
 			return serverNullable.trackerResponses()

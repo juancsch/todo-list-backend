@@ -133,16 +133,23 @@ function HttpServer (port, _http = http, log = console) {
 	 */
 	async function handleRequest (request, response) {
 		try {
-			const actualRoute = routes.find((route) => route.method === request.method && route.path === request.url)
-			if (actualRoute) {
+			const actualRoute = routes.find(byRoute)
+			if (actualRoute !== undefined) {
 				await actualRoute.handler(request, response)
 				return
 			}
-
 			notFoundHandler(request, response)
-
 		} catch (err) {
 			errorHandler(request, response, err)
+		}
+
+		/**
+		 * @param {Route} route
+		 * @returns {boolean}
+		 */
+		function byRoute (route) {
+			const paths = request.url.split('/')
+			return route.method === request.method && route.path === `/${paths[1]}`
 		}
 
 		/**
@@ -151,8 +158,12 @@ function HttpServer (port, _http = http, log = console) {
 		 */
 		function notFoundHandler (request, response) {
 			log.info('Not found', request.url)
-			response.writeHead(404)
-			response.end()
+			response.writeHead(404, {
+				'Content-Type': 'application/json'
+			})
+			response.end(JSON.stringify({
+				message: `Not found [${request.url}]`
+			}))
 		}
 
 		/**
@@ -162,8 +173,12 @@ function HttpServer (port, _http = http, log = console) {
 		 */
 		function errorHandler (request, response, error) {
 			log.error('Error in', request.url, error)
-			response.writeHead(500)
-			response.end()
+			response.writeHead(500, {
+				'Content-Type': 'application/json'
+			})
+			response.end(JSON.stringify({
+				message: `ERROR when request [${request.url}]`
+			}))
 		}
 	}
 }
@@ -180,7 +195,7 @@ function TrackerResponses () {
 
 	return {
 		/**
-		 * @returns {Array<{status: number, payload: Array<import("../todos/GetAllTODOs.js").TODO>}>}
+		 * @returns {Array<{status: number, payload: Array<import("../todos/application/GetAllTODOs.js/index.js").TODO>}>}
 		 */
 		getResponses () {
 			return responses
@@ -191,7 +206,7 @@ function TrackerResponses () {
 		 */
 		trackResponse (status, payload) {
 			responses.push({
-				status, payload: JSON.parse(payload)
+				status, payload: payload === undefined ? undefined : JSON.parse(payload)
 			})
 		}
 	}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { after, before, describe, test } from 'node:test'
 
-import { GetAllTODOs } from '../../src/todos/GetAllTODOs.js'
+import { GetAllTODOs } from '../../src/todos/application/GetAllTODOs.js'
 import * as GetAllTODOsRoute from '../../src/todos/infra/routes/GetAllTODOsRoute.js'
 import * as TODOsFileRepository from '../../src/todos/infra/TODOsFileRepository.js'
 import * as HttpServer from '../../src/web/Server.js'
@@ -44,7 +44,9 @@ describe('TODO list server', () => {
 		const response = await fetch('http://localhost:8080/error')
 
 		assert.equal(response.status, 500)
-		assert.equal(response.statusText, 'Internal Server Error')
+		assert.deepEqual(await response.json(), {
+			message: 'ERROR when request [/error]'
+		})
 	})
 
 	test('should response with not found: 404', async () => {
@@ -52,7 +54,9 @@ describe('TODO list server', () => {
 		const response = await fetch('http://localhost:8080/unknown')
 
 		assert.equal(response.status, 404)
-		assert.equal(response.statusText, 'Not Found')
+		assert.deepEqual(await response.json(), {
+			message: 'Not found [/unknown]'
+		})
 	})
 
 	test('should get all TODOs', async () => {
@@ -74,4 +78,6 @@ describe('TODO list server', () => {
 			done: false
 		}])
 	})
+
+	test.todo('should get one TODO')
 })

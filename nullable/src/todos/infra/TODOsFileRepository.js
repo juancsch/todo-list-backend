@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 /**
  * @typedef {object} TODOsFileRepository
  * @property {function(): Promise<Array<{id: string, text: string, done: boolean}>>} getAllTODOs
+ * @property {function(string): Promise<{id: string, text: string, done: boolean} | undefined>} getTODO
  */
 
 /**
@@ -41,6 +42,14 @@ function TODOsFileRepository (dbPath, _fs = fs) {
 		 */
 		async getAllTODOs () {
 			return JSON.parse(await _fs.readFile(dbPath, 'utf8'))
+		},
+		/**
+		 * @param {string} id
+		 * @returns {Promise<{id: string, text: string, done: boolean} | undefined>}
+		 */
+		async getTODO (id) {
+			const todos = await this.getAllTODOs()
+			return todos.find(todo => todo.id === id)
 		}
 	}
 }

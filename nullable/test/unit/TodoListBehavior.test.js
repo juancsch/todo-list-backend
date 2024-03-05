@@ -1,8 +1,10 @@
 import assert from 'node:assert'
 import { describe, test } from 'node:test'
 
-import { GetAllTODOs } from '../../src/todos/GetAllTODOs.js'
+import { GetAllTODOs } from '../../src/todos/application/GetAllTODOs.js'
+import { GetTODO } from '../../src/todos/application/GetTODO.js'
 import * as GetAllTODOsRoute from '../../src/todos/infra/routes/GetAllTODOsRoute.js'
+import * as GetTODORoute from '../../src/todos/infra/routes/GetTODORoute.js'
 import * as TODOsFileRepository from '../../src/todos/infra/TODOsFileRepository.js'
 
 describe('TODO list behaviour', () => {
@@ -33,5 +35,42 @@ describe('TODO list behaviour', () => {
 		const response = route.trackerResponses()[0]
 		assert.equal(response.status, 200)
 		assert.deepEqual(response.payload, todos)
+	})
+
+	test('should get one TODO from store', async () => {
+		// Given
+		const route = GetTODORoute.createNull()
+		const todos = [{
+			id: '367af223-0499-4203-90ae-c3fa4ad3351e',
+			text: 'todo 1',
+			done: false
+		}]
+		const repository = TODOsFileRepository.createNull(todos)
+
+		// When
+		GetTODO(route, repository)
+		await route.simulateRequest('367af223-0499-4203-90ae-c3fa4ad3351e')
+
+		// Then
+		const response = route.trackerResponses()[0]
+		assert.equal(response.status, 200)
+		assert.deepEqual(response.payload, todos[0])
+	})
+
+	test('should request a TODO that not exists', async () => {
+		// Given
+		const route = GetTODORoute.createNull()
+		const repository = TODOsFileRepository.createNull([])
+
+		// When
+		GetTODO(route, repository)
+		await route.simulateRequest('367af223-0499-4203-90ae-c3fa4ad3351f')
+
+		// Then
+		const response = route.trackerResponses()[0]
+		assert.equal(response.status, 404)
+		assert.deepEqual(response.payload, {
+			message: 'TODO [367af223-0499-4203-90ae-c3fa4ad3351f] not found'
+		})
 	})
 })
