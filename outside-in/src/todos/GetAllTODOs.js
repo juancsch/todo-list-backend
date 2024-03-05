@@ -2,14 +2,14 @@ import { readFile } from 'fs/promises'
 
 /**
  * @param {import("../Log.js").Log} log
- * @param {import("../Config.js").Config} config
+ * @param {string} dbPath
  * @returns {function(): Promise<{id: string, text: string, done: boolean}[]>}
  */
-export function GetAllTODOs (log, config) {
+export function GetAllTODOs (log, dbPath) {
 
-	log.info('Get all TODOs from db:', config.dbPath)
+	log.info('Get all TODOs from db:', dbPath) // TODO: inject an abstraction that wrapper this (repository)
 
 	return async () => {
-		return JSON.parse(await readFile(config.dbPath, 'utf8'))
+		return JSON.parse(await readFile(dbPath, 'utf8'))
 	}
 }

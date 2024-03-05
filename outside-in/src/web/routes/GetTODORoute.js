@@ -9,7 +9,7 @@ import { GetTODO } from '../../todos/GetTODO.js'
  */
 export function GetTODORoute (log, config) {
 
-	const getTODO = GetTODO(log, config)
+	const getTODO = GetTODO(log, config.dbPath)
 
 	return {
 		/**
