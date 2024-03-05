@@ -5,7 +5,6 @@ import http, { IncomingMessage, ServerResponse } from 'node:http'
  * @property {function(): Promise<void>} start
  * @property {function(): Promise<void>} stop
  * @property {function(Route): void} addRoute
- * @property {function(function(): Promise<Array<import("../todos/GetAllTODOs.js").TODO>>): void} addGetAllTODOs
  */
 
 /**
@@ -50,6 +49,7 @@ export function createNull () {
  */
 function HttpServer (port, _http = http, log = console) {
 
+	// for testing proposals
 	const trackerResponses = TrackerResponses()
 
 	const server = _http.createServer()
@@ -86,26 +86,6 @@ function HttpServer (port, _http = http, log = console) {
 		 */
 		addRoute (route) {
 			addRoute(route)
-		},
-		/**
-		 * @param {function(): Promise<Array<import("../todos/GetAllTODOs.js").TODO>>} getAllTODOs
-		 */
-		addGetAllTODOs (getAllTODOs) {
-			addRoute({
-				method: 'GET',
-				path: '/todos',
-				/**
-				 * @param {IncomingMessage} request
-				 * @param {ServerResponse} response
-				 */
-				handler: async (request, response) => {
-					const allTODOs = await getAllTODOs()
-					response.writeHead(200, {
-						'Content-Type': 'application/json'
-					})
-					response.end(JSON.stringify(allTODOs))
-				}
-			})
 		},
 		// for testing proposals
 		/**

@@ -1,5 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http'
 
+import * as HttpServer from '../../../web/Server.js'
+
 /**
  * @typedef {object} GetAllTODOsRoute
  * @property {function(function(): Promise<Array<import("../../GetAllTODOs.js").TODO>>): void} addGetAllTODOs
@@ -18,27 +20,27 @@ export function create (server) {
  * @returns {GetAllTODOsRoute}
  */
 function GetAllTODOsRoute (server) {
-
 	return {
 		/**
 		 * @param {function(): Promise<Array<import("../../GetAllTODOs.js").TODO>>} getAllTODOs
 		 */
 		addGetAllTODOs (getAllTODOs) {
-			server.addRoute({
+			const getAllTODOsRoute = {
 				method: 'GET',
 				path: '/todos',
 				/**
-				 * @param {IncomingMessage} request
+				 * @param {IncomingMessage} _
 				 * @param {ServerResponse} response
 				 */
-				handler: async (request, response) => {
+				handler: async (_, response) => {
 					const allTODOs = await getAllTODOs()
 					response.writeHead(200, {
 						'Content-Type': 'application/json'
 					})
 					response.end(JSON.stringify(allTODOs))
 				}
-			})
+			}
+			server.addRoute(getAllTODOsRoute)
 		}
 	}
 }
@@ -50,72 +52,24 @@ function GetAllTODOsRoute (server) {
  * }}
  */
 export function createNull () {
-	const trackerResponses = TrackerResponses()
-	let serverRoute
-	const getAllTODOs = GetAllTODOsRoute({
-		/**
-		 * @param {import('../../../web/Server.js').Route} route
-		 */
-		addRoute (route) {
-			serverRoute = route
-		}
-	})
-	let responseStatus
+	const serverNullable = HttpServer.createNull()
+	const getAllTODOsRoute = GetAllTODOsRoute(serverNullable)
 	return {
-		addGetAllTODOs: getAllTODOs.addGetAllTODOs,
+		addGetAllTODOs: getAllTODOsRoute.addGetAllTODOs,
 		/**
 		 *
 		 */
 		async simulateRequest () {
-			await serverRoute.handler({}, {
-				/**
-				 * @param {number} status
-				 */
-				writeHead: (status) => {
-					responseStatus = status
-				},
-				/**
-				 * @param {import("../../GetAllTODOs.js").TODO} payload
-				 */
-				end: (payload) => {
-					trackerResponses.trackResponse(responseStatus, payload)
-				}
+			await serverNullable.simulateRequest({
+				method: 'GET',
+				path: '/todos'
 			})
 		},
 		/**
 		 * @returns {Array<{status: number, payload: Array<import("../../GetAllTODOs.js").TODO>}>}
 		 */
 		trackerResponses () {
-			return trackerResponses.getResponses()
-		}
-	}
-}
-
-/**
- * @returns {{
- *   getResponses: function(): Array<{status: number, payload: Array<import("../../GetAllTODOs.js").TODO>}>,
- *   trackResponse: function(number, any): void
- * }}
- */
-function TrackerResponses () {
-
-   const responses = []
-
-   return {
-		/**
-		 * @returns {Array<{status: number, payload: Array<import("../../GetAllTODOs.js").TODO>}>}
-		 */
-		getResponses () {
-			return responses
-		},
-		/**
-		 * @param {number} status
-		 * @param {string} payload
-		 */
-		trackResponse (status, payload) {
-			responses.push({
-				status, payload: JSON.parse(payload)
-			})
+			return serverNullable.trackerResponses()
 		}
 	}
 }

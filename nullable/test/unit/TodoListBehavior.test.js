@@ -2,16 +2,14 @@ import assert from 'node:assert'
 import { describe, test } from 'node:test'
 
 import { GetAllTODOs } from '../../src/todos/GetAllTODOs.js'
-// import * as GetAllTODOsRoute from '../../src/todos/infra/routes/GetAllTODOsRoute.js'
+import * as GetAllTODOsRoute from '../../src/todos/infra/routes/GetAllTODOsRoute.js'
 import * as TODOsFileRepository from '../../src/todos/infra/TODOsFileRepository.js'
-import * as HttpServer from '../../src/web/Server.js'
 
 describe('TODO list behaviour', () => {
 
 	test('should get all TODOs from store', async () => {
 		// Given
-		const server = HttpServer.createNull()
-		// const route = GetAllTODOsRoute.createNull()
+		const route = GetAllTODOsRoute.createNull()
 		const todos = [{
 			id: '367af223-0499-4203-90ae-c3fa4ad3351e',
 			text: 'todo 1',
@@ -28,14 +26,11 @@ describe('TODO list behaviour', () => {
 		const repository = TODOsFileRepository.createNull(todos)
 
 		// When
-		GetAllTODOs(server, repository)
-		await server.simulateRequest({
-			method: 'GET',
-			path: '/todos'
-		})
+		GetAllTODOs(route, repository)
+		await route.simulateRequest()
 
 		// Then
-		const response = server.trackerResponses()[0]
+		const response = route.trackerResponses()[0]
 		assert.equal(response.status, 200)
 		assert.deepEqual(response.payload, todos)
 	})
