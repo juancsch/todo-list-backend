@@ -4,7 +4,7 @@ import * as HttpServer from '../../../web/Server.js'
 
 /**
  * @typedef {object} GetTODORoute
- * @property {function(function(string): Promise<import("../../domain/TODO.js").TODO>): void} addGetTODO
+ * @property {function(function(string): Promise<import("../../domain/TODO.js").TODO>): void} onGetTODO
  */
 
 /**
@@ -24,7 +24,7 @@ function GetTODORoute (server) {
 		/**
 		 * @param {function(string): Promise<import("../../domain/TODO.js").TODO>} getTODO
 		 */
-		addGetTODO (getTODO) {
+		onGetTODO (getTODO) {
 			const getTODORoute = {
 				method: 'GET',
 				path: '/todos',
@@ -68,7 +68,7 @@ export function createNull () {
 	const serverNullable = HttpServer.createNull()
 	const getTODORoute = GetTODORoute(serverNullable)
 	return {
-		addGetTODO: getTODORoute.addGetTODO,
+		onGetTODO: getTODORoute.onGetTODO,
 		/**
 		 * @param {string} id
 		 */

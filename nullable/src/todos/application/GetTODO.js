@@ -1,10 +1,10 @@
 /**
- * @param {{addGetTODO: function(function(string): Promise<import('../domain/TODO.js').TODO | undefined>): void}} view
+ * @param {{onGetTODO: function(function(string): Promise<import('../domain/TODO.js').TODO | undefined>): void}} view
  * @param {import('../infra/TODOsFileRepository.js').TODOsFileRepository} repository
  */
 export function GetTODO (view, repository) {
 
-	view.addGetTODO(getTODO)
+	view.onGetTODO(getTODO)
 
 	/**
 	 * @param {string} id

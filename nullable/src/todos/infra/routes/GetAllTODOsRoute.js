@@ -4,7 +4,7 @@ import * as HttpServer from '../../../web/Server.js'
 
 /**
  * @typedef {object} GetAllTODOsRoute
- * @property {function(function(): Promise<Array<import("../../domain/TODO.js").TODO>>): void} addGetAllTODOs
+ * @property {function(function(): Promise<Array<import("../../domain/TODO.js").TODO>>): void} onGetAllTODOs
  */
 
 /**
@@ -24,7 +24,7 @@ function GetAllTODOsRoute (server) {
 		/**
 		 * @param {function(): Promise<Array<import("../../domain/TODO.js").TODO>>} getAllTODOs
 		 */
-		addGetAllTODOs (getAllTODOs) {
+		onGetAllTODOs (getAllTODOs) {
 			const getAllTODOsRoute = {
 				method: 'GET',
 				path: '/todos',
@@ -55,7 +55,7 @@ export function createNull () {
 	const serverNullable = HttpServer.createNull()
 	const getAllTODOsRoute = GetAllTODOsRoute(serverNullable)
 	return {
-		addGetAllTODOs: getAllTODOsRoute.addGetAllTODOs,
+		onGetAllTODOs: getAllTODOsRoute.onGetAllTODOs,
 		/**
 		 *
 		 */

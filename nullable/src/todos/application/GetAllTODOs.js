@@ -1,10 +1,10 @@
 /**
- * @param {{addGetAllTODOs: function(function(): Promise<Array<import('../domain/TODO.js').TODO>>): void}} view
+ * @param {{onGetAllTODOs: function(function(): Promise<Array<import('../domain/TODO.js').TODO>>): void}} view
  * @param {import('../infra/TODOsFileRepository.js').TODOsFileRepository} repository
  */
 export function GetAllTODOs (view, repository) {
 
-	view.addGetAllTODOs(getAllTODOs)
+	view.onGetAllTODOs(getAllTODOs)
 
 	/**
 	 * @returns {Promise<Array<import('../domain/TODO.js').TODO>>}
